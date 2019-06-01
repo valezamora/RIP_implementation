@@ -1,5 +1,5 @@
 # Implementación de RIP utilizando sockets
-## Redes de Computadores CI-1320
+## CI-1320 Redes de Computadores
 
 Integrantes:
 * José Alfaro
