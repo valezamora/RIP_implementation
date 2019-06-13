@@ -1,2 +1,8 @@
 # Pycharm files
  .idea/*.xml
+
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/vcs.xml
+.idea/**/modules.xml
+.idea/**/misc.xml
