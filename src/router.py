@@ -13,7 +13,7 @@ class Router(Thread):
         self.id = id
         puerto = 7075
 
-        #Prepara los datos requeridos para el socket de envio de información
+        #Prepara los datos requeridos para el socket de envio de informacion
         self.multicast_group = ('224.3.29.71', 10000)
         self.server_address = ('', 10000)
         self.socket_envio = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -26,7 +26,7 @@ class Router(Thread):
         while 1:
             sent = self.socket_envio.sendto("mensaje".encode(), self.multicast_group)
             print("Nodo " + str(self.id) + " ha enviado un mensaje")
-            timer_compartir = Timer(2, lambda: int()) #El timer requiere una función. Se escoge arbitrariamente int() pero no afecta
+            timer_compartir = Timer(2, lambda: int()) #El timer requiere una funcion. Se escoge arbitrariamente int() pero no afecta
             timer_compartir.start()
             timer_compartir.join()
 
@@ -40,7 +40,7 @@ class Router(Thread):
     def leerVecinos(self):
         while 1:
             print("Leyendo Vecinos")
-            timer_leer = Timer(2, lambda: int()) #El timer requiere una función. Se escoge arbitrariamente int() pero no afecta
+            timer_leer = Timer(2, lambda: int()) #El timer requiere una funcion. Se escoge arbitrariamente int() pero no afecta
             timer_leer.start()
             timer_leer.join()
 
@@ -50,7 +50,7 @@ class Router(Thread):
 
     def run(self):
         '''
-        Método obligatorio de toda clase Thread
+        Metodo obligatorio de toda clase Thread
         Se ejecuta al hacerle start() o run() a la instancia de la clase
         :return: None
         '''
