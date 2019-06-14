@@ -6,11 +6,11 @@ from tabla_rutas import TablaRutas
 HOST = '127.0.0.1'
 ports = [2001, 2002, 2003, 2004, 2005]
 # Instancias de tabla de rutas
-tablaRuta1 = TablaRutas(1)
-tablaRuta2 = TablaRutas(2)
-tablaRuta3 = TablaRutas(3)
-tablaRuta4 = TablaRutas(4)
-tablaRuta5 = TablaRutas(5)
+tablaRutas1 = TablaRutas(1)
+tablaRutas2 = TablaRutas(2)
+tablaRutas3 = TablaRutas(3)
+tablaRutas4 = TablaRutas(4)
+tablaRutas5 = TablaRutas(5)
 kill3 = False
 
 def compartir():
@@ -19,23 +19,23 @@ def compartir():
     if (threading.current_thread().getName() == 'comparte3'):
         while (count < 3):
             print('COMPARTE3')
-            # Send tablaRutas3
+            # Send tablaRutas3.string_rutas
             count += 1
 
     else:
         while (count < 3):
             if (threading.current_thread().getName() == 'comparte1'):
                 print('COMPARTE1')
-                # Send tablaRutas1
+                # Send tablaRutas1.string_rutas
             elif (threading.current_thread().getName() == 'comparte2'):
                 print('COMPARTE2')
-                # Send tablaRutas2
+                # Send tablaRutas2.string_rutas
             elif (threading.current_thread().getName() == 'comparte4'):
                 print('COMPARTE4')
-                # Send tablaRutas4
+                # Send tablaRutas4.string_rutas
             elif (threading.current_thread().getName() == 'comparte5'):
                 print('COMPARTE5')
-                # Send tablaRutas5
+                # Send tablaRutas5.string_rutas
             count += 1
             time.sleep(3)
 
