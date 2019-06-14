@@ -1,15 +1,16 @@
 import threading, time
 import socket
 import ruta
+from tabla_rutas import TablaRutas
 
 HOST = '127.0.0.1'
 ports = [2001, 2002, 2003, 2004, 2005]
 # Instancias de tabla de rutas
-tablaRuta1 = []
-tablaRuta2 = []
-tablaRuta3 = []
-tablaRuta4 = []
-tablaRuta5 = []
+tablaRuta1 = TablaRutas(1)
+tablaRuta2 = TablaRutas(2)
+tablaRuta3 = TablaRutas(3)
+tablaRuta4 = TablaRutas(4)
+tablaRuta5 = TablaRutas(5)
 kill3 = False
 
 def compartir():

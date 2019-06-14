@@ -1,7 +1,13 @@
 import ruta
 
+
 class TablaRutas:
     rutas = []
+    id = None
+
+    def __init__(self, i):
+        self.id = i
+
 
     def agregar_ruta(self, ruta):
         self.rutas.append(ruta)
@@ -15,12 +21,14 @@ class TablaRutas:
         print(string)
 
     # Convierte un string a una tabla de rutas
-    def string_to_tabla(self):
+    def string_to_tabla(self, s):
         print('string to tabla')
+        splitted = s
 
     # Recibe una tabla de rutas y actualiza la tabla propia con la informacion recibida
-    def actualizarTabla(self, tabla):
+    def actualizar_tabla(self, tabla_string):
         print('actualizando tabla')
+        self.string_to_tabla(tabla_string)
         for r in self.rutas:
             print('recibiendo ')
 
