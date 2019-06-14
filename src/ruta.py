@@ -4,3 +4,6 @@ class Ruta:
         self.mascara = mascara
         self.siguiente = siguiente
         self.distancia = distancia
+
+    def ruta_to_string(self):
+        return self.red + ',' + self.mascara + ',' + self.siguiente + ',' + self.distancia
