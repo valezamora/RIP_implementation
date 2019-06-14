@@ -17,8 +17,8 @@ class TablaRutas:
         print('running existe ruta?')
 
     # Convierte la tabla de rutas a un string
-    # Retorna: String que contiene la información de la tabla de rutas
-    def string_rutas(self):
+    # Retorna: String que contiene la informacion de la tabla de rutas cada ruta separada por un ';'
+    def get_rutas(self):
         string = ''
         for r in range(len(self.rutas)):
             string += self.rutas[r].ruta_to_string()
@@ -47,4 +47,4 @@ class TablaRutas:
 rr = ruta.Ruta('1', '2', '3', '4')
 tabla = TablaRutas()
 tabla.agregar_ruta(rr)
-tabla.string_rutas()
+tabla.get_rutas()
