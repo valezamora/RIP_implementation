@@ -1,19 +1,49 @@
 import threading, time
 import socket
+import ruta
+
+HOST = '127.0.0.1'
+ports = [2001, 2002, 2003, 2004, 2005]
+# Instancias de tabla de rutas
+tablaRuta1 = []
+tablaRuta2 = []
+tablaRuta3 = []
+tablaRuta4 = []
+tablaRuta5 = []
+kill3 = False
 
 def compartir():
     nombre = threading.current_thread().getName()
     count = 0
-    while (count < 10):
-        print(nombre, ' - ', count)
-        time.sleep(2)
+    if (threading.current_thread().getName() == 'comparte3'):
+        while (count < 3):
+            print('COMPARTE3')
+            # Send tablaRutas3
+            count += 1
+
+    else:
+        while (count < 3):
+            if (threading.current_thread().getName() == 'comparte1'):
+                print('COMPARTE1')
+                # Send tablaRutas1
+            elif (threading.current_thread().getName() == 'comparte2'):
+                print('COMPARTE2')
+                # Send tablaRutas2
+            elif (threading.current_thread().getName() == 'comparte4'):
+                print('COMPARTE4')
+                # Send tablaRutas4
+            elif (threading.current_thread().getName() == 'comparte5'):
+                print('COMPARTE5')
+                # Send tablaRutas5
+            count += 1
+            time.sleep(3)
 
 def recibir():
     nombre = threading.current_thread().getName()
     print(nombre)
     time.sleep(2)
 
-for num_hilo in range(5):
+for num_hilo in range(1,6):
     hilo1 = threading.Thread(name='comparte%s' % num_hilo,
                             target=compartir)
     hilo2 = threading.Thread(name='recibe%s' % num_hilo,
