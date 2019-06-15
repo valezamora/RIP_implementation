@@ -17,6 +17,16 @@ tablaRutas4 = TablaRutas(4)
 tablaRutas5 = TablaRutas(5)
 kill3 = False
 
+# Datos para inicializar routers
+r1 = '10.0.1.0,255.255.255.0,10.0.1.1,1'
+r2 = '10.0.3.0,255.255.255.0,10.0.3.1,1'
+r4 = '10.0.2.0,255.255.255.0,10.0.2.1,1'
+r5 = '10.0.4.0,255.255.255.0,10.0.4.1,1'
+
+tablaRutas1.actualizar_tabla(r1)
+tablaRutas2.actualizar_tabla(r2)
+tablaRutas4.actualizar_tabla(r4)
+tablaRutas5.actualizar_tabla(r5)
 
 def compartir():
     nombre = threading.current_thread().getName()
@@ -25,25 +35,25 @@ def compartir():
         while (count < 3):
             print('COMPARTE3')
             # Send tablaRutas3
-            sent = sockets[3][0].sendto("Prueba", (HOST, 2001))
+            sent = sockets[3][0].sendto(tablaRutas3.get_rutas(), (HOST, 2001))
             count += 1
 
     else:
         while (count < 10):
             if threading.current_thread().getName() == 'comparte1':
-                sent = sockets[1][0].sendto("Prueba", (HOST, 2001))
+                sent = sockets[1][0].sendto(tablaRutas1.get_rutas(), (HOST, 2001))
                 print('COMPARTE1')
                 # Send tablaRutas1
             elif threading.current_thread().getName() == 'comparte2':
-                sent = sockets[2][0].sendto("Prueba", (HOST, 2002))
+                sent = sockets[2][0].sendto(tablaRutas2.get_rutas(), (HOST, 2002))
                 print('COMPARTE2')
                 # Send tablaRutas2
             elif threading.current_thread().getName() == 'comparte4':
-                sent = sockets[4][0].sendto("Prueba", (HOST, 2004))
+                sent = sockets[4][0].sendto(tablaRutas4.get_rutas(), (HOST, 2004))
                 print('COMPARTE4')
                 # Send tablaRutas4
             elif threading.current_thread().getName() == 'comparte5':
-                sent = sockets[5][0].sendto("Prueba", (HOST, 2005))
+                sent = sockets[5][0].sendto(tablaRutas5.get_rutas(), (HOST, 2005))
                 print('COMPARTE5')
                 # Send tablaRutas5
             count += 1
@@ -67,23 +77,27 @@ def recibir():
                     dato, address = sockets[1][1].recvfrom(1024)
                     print("Recibe 1 exitoso")
                     print(dato)
-                    # Send tablaRutas1
+                    tablaRutas1.actualizar_tabla(dato)
+
                 elif threading.current_thread().getName() == 'recibe2':
                     print("recibe2")
                     dato , address = sockets[2][1].recvfrom(1024)
                     print("Recibe 2 exitoso")
                     print(dato)
-                    # Send tablaRutas2
+                    tablaRutas2.actualizar_tabla(dato)
+
                 elif threading.current_thread().getName() == 'recibe43':
                     #sockets[4][1].bind(server_address)
                     dato, address = sockets[4][1].recvfrom(1024)
                     print(dato)
-                    # Send tablaRutas4
+                    # FALTA AGREGAR EL ACTUALIZAR TABLA
+
                 elif threading.current_thread().getName() == 'recibe53':
                     #sockets[5][1].bind(server_address)
                     dato, address = sockets[5][1].recvfrom(1024)
                     print(dato)
-                    # Send tablaRuta
+                    # FALTA AGREGAR EL ACTUALIZAR TABLA
+
             except:
                 pass
             count += 1

@@ -63,8 +63,8 @@ class TablaRutas:
 
 
 # Start execution
-rr = Ruta('10.0.1.0', '255.255.255.0', '192.111.111.11', '4')
-tabla = TablaRutas(1)
-tabla.agregar_ruta(rr)
-tabla.get_rutas()
-tabla.actualizar_tabla('10.0.1.0,255.255.255.0,1,1;2,255.255.255.0,2,2')
+# rr = Ruta('10.0.1.0', '255.255.255.0', '192.111.111.11', '4')
+# tabla = TablaRutas(1)
+# tabla.agregar_ruta(rr)
+# tabla.get_rutas()
+# tabla.actualizar_tabla('10.0.1.0,255.255.255.0,1,1;2,255.255.255.0,2,2')
