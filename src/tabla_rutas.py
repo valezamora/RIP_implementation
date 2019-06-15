@@ -56,7 +56,7 @@ class TablaRutas:
 
     # Imprime la tabla de rutas
     def imprimirTabla(self):
-        print('Tabla ' + str(self.id))
+        print('\nTabla ' + str(self.id))
         print('Direccion\tMascara\t\t\tSiguiente\t\t\tDistancia')
         for ruta in self.rutas:
             print(ruta.red + '\t' + ruta.mascara + '\t' + ruta.siguiente + '\t\t' + ruta.distancia)
