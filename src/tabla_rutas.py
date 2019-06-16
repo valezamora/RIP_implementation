@@ -1,4 +1,4 @@
-from ruta import Ruta
+from .ruta import Ruta
 
 class TablaRutas:
     rutas = []
@@ -18,7 +18,7 @@ class TablaRutas:
 
         if not encontrado:
             # Revisar cual es el siguiente que tiene que agregar
-            self.rutas.append(Ruta(ruta2.red, ruta2.mascara, ruta2.siguiente, ruta2.distancia+1))
+            self.rutas.append(Ruta(ruta2.red, ruta2.mascara, ruta2.siguiente, int(ruta2.distancia)+1))
 
     # Verifica si una ruta existe dentro de la tabla de rutas
     def existe(self, ruta2):
