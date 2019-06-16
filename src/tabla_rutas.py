@@ -1,4 +1,4 @@
-from .ruta import Ruta
+from ruta import Ruta
 
 class TablaRutas:
     rutas = []

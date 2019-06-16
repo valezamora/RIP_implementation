@@ -3,7 +3,7 @@ import time
 from socket import *
 import struct
 
-from .tabla_rutas import TablaRutas
+from tabla_rutas import TablaRutas
 
 HOST = '224.3.29.72'
 ports = [2001 + i * 0 for i in range(0,11)]

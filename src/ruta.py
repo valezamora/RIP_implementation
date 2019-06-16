@@ -6,4 +6,4 @@ class Ruta:
         self.distancia = distancia
 
     def ruta_to_string(self):
-        return self.red + ',' + self.mascara + ',' + self.siguiente + ',' + self.distancia
+        return self.red + ',' + self.mascara + ',' + self.siguiente + ',' + str(self.distancia)
