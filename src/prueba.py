@@ -171,7 +171,8 @@ for num_hilo in range(1, 6):
     sockets[num_hilo].append(sock_envio)
     sockets[num_hilo].append(sock_recibido)
 
-    server_address = (HOST, MCAST_PORT)
+    #server_address = (HOST, MCAST_PORT)
+    server_address = ('', MCAST_PORT)
     sockets[num_hilo][1].setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
     sockets[num_hilo][1].bind(server_address)
 
