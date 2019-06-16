@@ -11,20 +11,21 @@ class TablaRutas:
     def agregar_ruta(self, ruta2):
         encontrado = False
         for ruta in self.rutas:
-            if ruta.red == ruta2.red and ruta2.distancia + 1 < ruta.distancia:
+            # La ruta ya esta en la tabla, actualiza la distancia si es menor que la que esta actualmente
+            if ruta.red == ruta2.red and (ruta2.distancia + 1) < ruta.distancia:
                 ruta.siguiente = ruta2.siguiente
-                ruta.distancia = ruta.distancia + 1
+                ruta.distancia = ruta2.distancia + 1
                 encontrado = True
 
         if not encontrado:
             # Revisar cual es el siguiente que tiene que agregar
-            self.rutas.append(Ruta(ruta2.red, ruta2.mascara, ruta2.siguiente, int(ruta2.distancia)+1))
+            self.rutas.append(Ruta(ruta2.red, ruta2.mascara, ruta2.siguiente, ruta2.distancia+1))
 
     # Verifica si una ruta existe dentro de la tabla de rutas
     def existe(self, ruta2):
         found = False
         for ruta in self.rutas:
-            if (ruta.red == ruta2.red):
+            if ruta.red == ruta2.red:
                 found = True
         return found
 
@@ -35,6 +36,7 @@ class TablaRutas:
         for r in range(len(self.rutas)):
             string += self.rutas[r].ruta_to_string()
             string += ';'
+        string = string[:-1]
         return string
 
     # Convierte un string a una tabla de rutas
@@ -43,7 +45,9 @@ class TablaRutas:
         new_routes = []
         for r in splitted:
             data = r.split(',')
-            new_routes.append(Ruta(data[0], data[1], data[3], data[3]))
+            if len(data) == 4:
+                new_routes.append(Ruta(data[0], data[1], data[2], int(data[3])))
+
         return new_routes
 
     # Recibe un string de tabla de rutas y actualiza la tabla propia con la informacion recibida
@@ -55,9 +59,10 @@ class TablaRutas:
     # Imprimir tabla de rutas
     def imprimir_tabla(self):
         print('\nTabla ' + str(self.id))
-        print('Direccion\tMascara\t\t\tSiguiente\t\t\tDistancia')
+        print('Cantidad de rutas: ', len(self.rutas))
+        print('Direccion\tMascara\t\t\tSiguiente\t\tDistancia')
         for ruta in self.rutas:
-            print(ruta.red + '\t' + ruta.mascara + '\t' + ruta.siguiente + '\t\t' + ruta.distancia)
+            print(ruta.red + '\t' + ruta.mascara + '\t' + ruta.siguiente + '\t\t' + str(ruta.distancia))
 
 
 # Start execution
