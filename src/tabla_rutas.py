@@ -1,21 +1,22 @@
 from ruta import Ruta
 
 class TablaRutas:
-    rutas = []
-    id = None
 
     def __init__(self, i):
         self.id = i
+        self.rutas = []
 
     # Agrega una ruta a la tabla de rutas
     def agregar_ruta(self, ruta2):
         encontrado = False
         for ruta in self.rutas:
-            # La ruta ya esta en la tabla, actualiza la distancia si es menor que la que esta actualmente
-            if ruta.red == ruta2.red and (ruta2.distancia + 1) < ruta.distancia:
-                ruta.siguiente = ruta2.siguiente
-                ruta.distancia = ruta2.distancia + 1
+            if ruta.red == ruta2.red:
                 encontrado = True
+                # Modifica la distancia solamente si es menor la nueva y no es inalcanzable (16)
+                if ruta2.distancia + 1 < ruta.distancia and ruta2 != 16:
+                    # Revisar cual es el siguiente que tiene que agregar
+                    ruta.siguiente = ruta2.siguiente
+                    ruta.distancia = ruta2.distancia + 1
 
         if not encontrado:
             # Revisar cual es el siguiente que tiene que agregar
@@ -64,10 +65,3 @@ class TablaRutas:
         for ruta in self.rutas:
             print(ruta.red + '\t' + ruta.mascara + '\t' + ruta.siguiente + '\t\t' + str(ruta.distancia))
 
-
-# Start execution
-# rr = Ruta('10.0.1.0', '255.255.255.0', '192.111.111.11', '4')
-# tabla = TablaRutas(1)
-# tabla.agregar_ruta(rr)
-# tabla.get_rutas()
-# tabla.actualizar_tabla('10.0.1.0,255.255.255.0,1,1;2,255.255.255.0,2,2')

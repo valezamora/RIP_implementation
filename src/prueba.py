@@ -5,10 +5,13 @@ import struct
 
 from tabla_rutas import TablaRutas
 
+# ------------------------ DEFINICION DE VARIALES -----------------------------------
 HOST = '224.3.29.72'
-ports = [2001 + i * 0 for i in range(0, 11)]
+MCAST_PORT = 2012
+
+# ports = [2001 + i * 0 for i in range(0, 11)]
 sockets = [[] for i in range(0, 6)]  # Indice 0 es para el socket que envia y el indice 1 es para el socket que recibe datos
-main_port = 2001
+# main_port = 2001
 
 
 # Instancias de tabla de rutas
@@ -25,46 +28,30 @@ r2 = '10.0.3.0,255.255.255.0,10.0.3.1,0'
 r4 = '10.0.2.0,255.255.255.0,10.0.2.1,0'
 r5 = '10.0.4.0,255.255.255.0,10.0.4.1,0'
 
-# ESTO SE ESTA AGREGANDO A TODAS LAS TABLAS
-tablaRutas1.actualizar_tabla(r1)
-tablaRutas2.actualizar_tabla(r2)
-tablaRutas4.actualizar_tabla(r4)
-tablaRutas5.actualizar_tabla(r5)
-
-print('Configuracion inicial:')
-tablaRutas1.imprimir_tabla()
-tablaRutas2.imprimir_tabla()
-tablaRutas3.imprimir_tabla()
-tablaRutas4.imprimir_tabla()
-tablaRutas5.imprimir_tabla()
-
-nodo = input('Digite el numero de nodo que desea desplegar (1-5): ')
-print('IMRPIMIENDO DATOS DEL NODO ', nodo)
 
 def compartir():
     nombre = threading.current_thread().getName()
     count = 0
     if (threading.current_thread().getName() == 'comparte3'):
-        while (count < 1):
+        while (time.time() - start_time < 60):
             # Send tablaRutas3
-            sent = sockets[3][0].sendto(tablaRutas3.get_rutas().encode(), (HOST, main_port))
+            sent = sockets[3][0].sendto(tablaRutas3.get_rutas().encode(), (HOST, MCAST_PORT))
             count += 1
             time.sleep(10)  # Envia cada 10 segundos
 
     else:
-        while (count < 1):
+        while (time.time() - start_time < 120):
             if threading.current_thread().getName() == 'comparte1':
-                sent = sockets[1][0].sendto(tablaRutas1.get_rutas().encode(), (HOST, main_port))
+                sent = sockets[1][0].sendto(tablaRutas1.get_rutas().encode(), (HOST, MCAST_PORT))
                 # Send tablaRutas1
             elif threading.current_thread().getName() == 'comparte2':
-                mensaje = tablaRutas2.get_rutas()
-                sent = sockets[2][0].sendto(tablaRutas2.get_rutas().encode(), (HOST, main_port))
+                sent = sockets[2][0].sendto(tablaRutas2.get_rutas().encode(), (HOST, MCAST_PORT))
                 # Send tablaRutas2
             elif threading.current_thread().getName() == 'comparte4':
-                sent = sockets[4][0].sendto(tablaRutas4.get_rutas().encode(), (HOST, main_port))
+                sent = sockets[4][0].sendto(tablaRutas4.get_rutas().encode(), (HOST, MCAST_PORT))
                 # Send tablaRutas4
             elif threading.current_thread().getName() == 'comparte5':
-                sent = sockets[5][0].sendto(tablaRutas5.get_rutas().encode(), (HOST, main_port))
+                sent = sockets[5][0].sendto(tablaRutas5.get_rutas().encode(), (HOST, MCAST_PORT))
                 # Send tablaRutas5
             count += 1
             time.sleep(10)  # Envia cada 10 segundos
@@ -75,14 +62,15 @@ def recibir():
     count = 0
 
     if threading.current_thread().getName() == 'recibe3':
-        while (count < 1):
-            dato, address = sockets[1][1].recvfrom(1024)
+        while (time.time() - start_time < 60):
+            dato, address = sockets[3][1].recvfrom(1024)
             dato = dato.decode()
             tablaRutas3.actualizar_tabla(dato)
             count += 1
+            time.sleep(1)
 
     else:
-        while (count < 1):
+        while (time.time() - start_time < 120):
             try:
                 if threading.current_thread().getName() == 'recibe1':
                     dato, address = sockets[1][1].recvfrom(1024)
@@ -116,27 +104,47 @@ def recibir():
                     tablaRutas4.imprimir_tabla()
                 elif nodo == '5' and threading.current_thread().getName() == 'recibe5':
                     tablaRutas5.imprimir_tabla()
-
             except:
                 pass
             count += 1
-            time.sleep(3)
+            time.sleep(1)
+
+
+# ------------------------- PROGRAMA ---------------------------------------------
+
+start_time = time.time()
+
+tablaRutas1.actualizar_tabla(r1)
+tablaRutas2.actualizar_tabla(r2)
+tablaRutas4.actualizar_tabla(r4)
+tablaRutas5.actualizar_tabla(r5)
+
+print('Configuracion inicial:')
+tablaRutas1.imprimir_tabla()
+tablaRutas2.imprimir_tabla()
+tablaRutas3.imprimir_tabla()
+tablaRutas4.imprimir_tabla()
+tablaRutas5.imprimir_tabla()
+
+print()
+nodo = input('Digite el numero de nodo que desea desplegar (1-5): ')
+print('IMRPIMIENDO DATOS DEL NODO ', nodo)
 
 
 for num_hilo in range(1, 6):
     # Crea la informacion de los sockets que envian y reciben del router actual
-    grupo_envio = (HOST, ports[num_hilo])
+    grupo_envio = (HOST, MCAST_PORT)
     sock_envio = socket(AF_INET, SOCK_DGRAM)
     # sock_envio.settimeout(0.2)
     ttl = struct.pack('b', 5)
     sock_envio.setsockopt(IPPROTO_IP, IP_MULTICAST_TTL, ttl)
 
-    grupo_recepcion = (HOST, main_port)
+    grupo_recepcion = (HOST, MCAST_PORT)
     sock_recibido = socket(AF_INET, SOCK_DGRAM)
     # settimeout(0.2)
     ttl = struct.pack('b', 1)
     sock_recibido.setsockopt(IPPROTO_IP, IP_MULTICAST_TTL, ttl)
-    sock_recibido.setblocking(0)
+    # sock_recibido.setblocking(0)
 
     group = inet_aton(HOST)
     mreq = struct.pack('4sL', group, INADDR_ANY)
@@ -145,7 +153,7 @@ for num_hilo in range(1, 6):
     sockets[num_hilo].append(sock_envio)
     sockets[num_hilo].append(sock_recibido)
 
-    server_address = (HOST, ports[11 - num_hilo])
+    server_address = (HOST, MCAST_PORT)
     sockets[num_hilo][1].setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
     sockets[num_hilo][1].bind(server_address)
 
