@@ -6,8 +6,8 @@ import struct
 from tabla_rutas import TablaRutas
 
 HOST = '224.3.29.72'
-ports = [2001 + i * 0 for i in range(0,11)]
-sockets = [[] for i in range(0,6)]  # Indice 0 es para el socket que envia y el indice 1 es para el socket que recibe datos
+ports = [2001 + i * 0 for i in range(0, 11)]
+sockets = [[] for i in range(0, 6)]  # Indice 0 es para el socket que envia y el indice 1 es para el socket que recibe datos
 main_port = 2001
 
 
@@ -58,7 +58,8 @@ def compartir():
                 sent = sockets[5][0].sendto(tablaRutas5.get_rutas().encode(), (HOST, main_port))
                 # Send tablaRutas5
             count += 1
-            time.sleep(3)
+
+    time.sleep(10)  # Envia cada 10 segundos
 
 
 def recibir():
@@ -115,7 +116,7 @@ def recibir():
 
 for num_hilo in range(1, 6):
     # Crea la informacion de los sockets que envian y reciben del router actual
-    grupo_envio = (HOST,ports[num_hilo])
+    grupo_envio = (HOST, ports[num_hilo])
     sock_envio = socket(AF_INET, SOCK_DGRAM)
     # sock_envio.settimeout(0.2)
     ttl = struct.pack('b', 5)
@@ -136,7 +137,7 @@ for num_hilo in range(1, 6):
     sockets[num_hilo].append(sock_recibido)
 
     server_address = ('', ports[11 - num_hilo])
-
+    print(num_hilo)
     sockets[num_hilo][1].setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
     sockets[num_hilo][1].bind(server_address)
 
