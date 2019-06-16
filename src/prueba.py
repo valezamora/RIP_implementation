@@ -28,6 +28,11 @@ r2 = '10.0.3.0,255.255.255.0,10.0.3.1,0'
 r4 = '10.0.2.0,255.255.255.0,10.0.2.1,0'
 r5 = '10.0.4.0,255.255.255.0,10.0.4.1,0'
 
+vecinos1 = ['3']
+vecinos2 = ['3']
+vecinos3 = ['1', '2', '4', '5']
+vecinos4 = ['3', '5']
+vecinos5 = ['3', '4']
 
 def compartir():
     nombre = threading.current_thread().getName()
@@ -42,16 +47,16 @@ def compartir():
     else:
         while (time.time() - start_time < 120):
             if threading.current_thread().getName() == 'comparte1':
-                sent = sockets[1][0].sendto(tablaRutas1.get_rutas().encode(), (HOST, MCAST_PORT))
+                sockets[1][0].sendto(tablaRutas1.get_rutas().encode(), (HOST, MCAST_PORT))
                 # Send tablaRutas1
             elif threading.current_thread().getName() == 'comparte2':
-                sent = sockets[2][0].sendto(tablaRutas2.get_rutas().encode(), (HOST, MCAST_PORT))
+                sockets[2][0].sendto(tablaRutas2.get_rutas().encode(), (HOST, MCAST_PORT))
                 # Send tablaRutas2
             elif threading.current_thread().getName() == 'comparte4':
-                sent = sockets[4][0].sendto(tablaRutas4.get_rutas().encode(), (HOST, MCAST_PORT))
+                sockets[4][0].sendto(tablaRutas4.get_rutas().encode(), (HOST, MCAST_PORT))
                 # Send tablaRutas4
             elif threading.current_thread().getName() == 'comparte5':
-                sent = sockets[5][0].sendto(tablaRutas5.get_rutas().encode(), (HOST, MCAST_PORT))
+                sockets[5][0].sendto(tablaRutas5.get_rutas().encode(), (HOST, MCAST_PORT))
                 # Send tablaRutas5
             count += 1
             time.sleep(10)  # Envia cada 10 segundos
@@ -65,8 +70,13 @@ def recibir():
         while (time.time() - start_time < 60):
             dato, address = sockets[3][1].recvfrom(1024)
             dato = dato.decode()
-            tablaRutas3.actualizar_tabla(dato)
+            split = dato.split('/')
+            id = split[0]
+            if id in vecinos3 and len(split) == 2:
+                tablaRutas3.actualizar_tabla(split[1])
             count += 1
+            if nodo == '3':
+                tablaRutas3.imprimir_tabla()
             time.sleep(1)
 
     else:
@@ -75,31 +85,39 @@ def recibir():
                 if threading.current_thread().getName() == 'recibe1':
                     dato, address = sockets[1][1].recvfrom(1024)
                     dato = dato.decode()
-                    tablaRutas1.actualizar_tabla(dato)
+                    split = dato.split('/')
+                    id = split[0]
+                    if id in vecinos1:
+                        tablaRutas1.actualizar_tabla(split[1])
 
                 elif threading.current_thread().getName() == 'recibe2':
                     dato , address = sockets[2][1].recvfrom(1024)
                     dato = dato.decode()
-                    tablaRutas2.actualizar_tabla(dato)
+                    split = dato.split('/')
+                    id = split[0]
+                    if id in vecinos2:
+                        tablaRutas2.actualizar_tabla(split[1])
 
                 elif threading.current_thread().getName() == 'recibe4':
-                    #sockets[4][1].bind(server_address)
                     dato, address = sockets[4][1].recvfrom(1024)
                     dato = dato.decode()
-                    tablaRutas4.actualizar_tabla(dato)
+                    split = dato.split('/')
+                    id = split[0]
+                    if id in vecinos4:
+                        tablaRutas4.actualizar_tabla(split[1])
 
                 elif threading.current_thread().getName() == 'recibe5':
-                    #sockets[5][1].bind(server_address)
                     dato, address = sockets[5][1].recvfrom(1024)
                     dato = dato.decode()
-                    tablaRutas5.actualizar_tabla(dato)
+                    split = dato.split('/')
+                    id = split[0]
+                    if id in vecinos5:
+                        tablaRutas5.actualizar_tabla(split[1])
 
                 if nodo == '1' and threading.current_thread().getName() == 'recibe1':
                     tablaRutas1.imprimir_tabla()
                 elif nodo == '2' and threading.current_thread().getName() == 'recibe2':
                     tablaRutas2.imprimir_tabla()
-                elif nodo == '3' and threading.current_thread().getName() == 'recibe3':
-                    tablaRutas3.imprimir_tabla()
                 elif nodo == '4' and threading.current_thread().getName() == 'recibe4':
                     tablaRutas4.imprimir_tabla()
                 elif nodo == '5' and threading.current_thread().getName() == 'recibe5':

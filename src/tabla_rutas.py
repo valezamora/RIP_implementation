@@ -31,9 +31,9 @@ class TablaRutas:
         return found
 
     # Convierte la tabla de rutas a un string
-    # Retorna: String que contiene la informacion de la tabla de rutas cada ruta separada por un ';'
+    # Retorna: String que contiene el id del nodo que envia, la informacion de la tabla de rutas cada ruta separada por un ';'
     def get_rutas(self):
-        string = ''
+        string = str(self.id) + '/'
         for r in range(len(self.rutas)):
             string += self.rutas[r].ruta_to_string()
             string += ';'
