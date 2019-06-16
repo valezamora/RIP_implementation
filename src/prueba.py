@@ -97,15 +97,15 @@ def recibir():
                     dato = dato.decode()
                     tablaRutas5.actualizar_tabla(dato)
 
-                if nodo == 1:
+                if nodo == '1':
                     tablaRutas1.imprimir_tabla()
-                elif nodo == 2:
+                elif nodo == '2':
                     tablaRutas2.imprimir_tabla()
-                elif nodo == 3:
+                elif nodo == '3':
                     tablaRutas3.imprimir_tabla()
-                elif nodo == 4:
+                elif nodo == '4':
                     tablaRutas4.imprimir_tabla()
-                elif nodo == 5:
+                elif nodo == '5':
                     tablaRutas5.imprimir_tabla()
 
             except:
