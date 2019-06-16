@@ -66,38 +66,35 @@ def recibir():
 
     if threading.current_thread().getName() == 'recibe3':
         while (count < 3):
-            print('recibe3')
-            # Send tablaRutas3
+            dato, address = sockets[1][1].recvfrom(1024)
+            dato = dato.decode()
+            tablaRutas3.actualizar_tabla(dato)
             count += 1
 
     else:
-        while (count < 100):
+        while (count < 10):
             try:
                 if threading.current_thread().getName() == 'recibe1':
                     dato, address = sockets[1][1].recvfrom(1024)
                     dato = dato.decode()
-                    print(dato)
                     tablaRutas1.actualizar_tabla(dato)
 
                 elif threading.current_thread().getName() == 'recibe2':
                     dato , address = sockets[2][1].recvfrom(1024)
                     dato = dato.decode()
-                    print(dato)
                     tablaRutas2.actualizar_tabla(dato)
 
                 elif threading.current_thread().getName() == 'recibe4':
                     #sockets[4][1].bind(server_address)
                     dato, address = sockets[4][1].recvfrom(1024)
                     dato = dato.decode()
-                    print(dato)
-                    # FALTA AGREGAR EL ACTUALIZAR TABLA
+                    tablaRutas4.actualizar_tabla(dato)
 
                 elif threading.current_thread().getName() == 'recibe5':
                     #sockets[5][1].bind(server_address)
                     dato, address = sockets[5][1].recvfrom(1024)
                     dato = dato.decode()
-                    print(dato)
-                    # FALTA AGREGAR EL ACTUALIZAR TABLA
+                    tablaRutas5.actualizar_tabla(dato)
 
                 if nodo == 1:
                     tablaRutas1.imprimir_tabla()
@@ -135,8 +132,6 @@ for num_hilo in range(1, 6):
     mreq = struct.pack('4sL', group, INADDR_ANY)
     sock_recibido.setsockopt(IPPROTO_IP, IP_ADD_MEMBERSHIP, mreq)
 
-
-    print(num_hilo)
     sockets[num_hilo].append(sock_envio)
     sockets[num_hilo].append(sock_recibido)
 
