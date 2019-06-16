@@ -11,13 +11,14 @@ class TablaRutas:
     def agregar_ruta(self, ruta2):
         encontrado = False
         for ruta in self.rutas:
-            if ruta.red == ruta2.red:
+            if ruta.red == ruta2.red and ruta2.distancia + 1 < ruta.distancia:
                 ruta.siguiente = ruta2.siguiente
-                ruta.distancia = ruta.distancia
+                ruta.distancia = ruta.distancia + 1
                 encontrado = True
 
         if not encontrado:
-            self.rutas.append(ruta2)
+            # Revisar cual es el siguiente que tiene que agregar
+            self.rutas.append(Ruta(ruta2.red, ruta2.mascara, ruta2.siguiente, ruta2.distancia+1))
 
     # Verifica si una ruta existe dentro de la tabla de rutas
     def existe(self, ruta2):

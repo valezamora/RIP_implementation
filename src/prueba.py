@@ -47,19 +47,15 @@ def compartir():
         while (count < 10):
             if threading.current_thread().getName() == 'comparte1':
                 sent = sockets[1][0].sendto(tablaRutas1.get_rutas().encode(), (HOST, main_port))
-                print('COMPARTE1')
                 # Send tablaRutas1
             elif threading.current_thread().getName() == 'comparte2':
                 sent = sockets[2][0].sendto(tablaRutas2.get_rutas().encode(), (HOST, main_port))
-                print('COMPARTE2')
                 # Send tablaRutas2
             elif threading.current_thread().getName() == 'comparte4':
                 sent = sockets[4][0].sendto(tablaRutas4.get_rutas().encode(), (HOST, main_port))
-                print('COMPARTE4')
                 # Send tablaRutas4
             elif threading.current_thread().getName() == 'comparte5':
                 sent = sockets[5][0].sendto(tablaRutas5.get_rutas().encode(), (HOST, main_port))
-                print('COMPARTE5')
                 # Send tablaRutas5
             count += 1
             time.sleep(3)
@@ -78,14 +74,12 @@ def recibir():
         while (count < 100):
             try:
                 if threading.current_thread().getName() == 'recibe1':
-                    print("recibe1")
                     dato, address = sockets[1][1].recvfrom(1024)
                     dato = dato.decode()
                     print(dato)
                     tablaRutas1.actualizar_tabla(dato)
 
                 elif threading.current_thread().getName() == 'recibe2':
-                    print("recibe2")
                     dato , address = sockets[2][1].recvfrom(1024)
                     dato = dato.decode()
                     print(dato)
