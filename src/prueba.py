@@ -30,6 +30,9 @@ tablaRutas2.actualizar_tabla(r2)
 tablaRutas4.actualizar_tabla(r4)
 tablaRutas5.actualizar_tabla(r5)
 
+nodo = input('Digite el numero de nodo que desea desplegar (1-5): ')
+print(nodo)
+
 def compartir():
     nombre = threading.current_thread().getName()
     count = 0
@@ -102,14 +105,24 @@ def recibir():
                     print(dato)
                     # FALTA AGREGAR EL ACTUALIZAR TABLA
 
+                if nodo == 1:
+                    tablaRutas1.imprimir_tabla()
+                elif nodo == 2:
+                    tablaRutas2.imprimir_tabla()
+                elif nodo == 3:
+                    tablaRutas3.imprimir_tabla()
+                elif nodo == 4:
+                    tablaRutas4.imprimir_tabla()
+                elif nodo == 5:
+                    tablaRutas5.imprimir_tabla()
+
             except:
                 pass
             count += 1
             time.sleep(3)
 
 
-for num_hilo in range(1,6):
-
+for num_hilo in range(1, 6):
     # Crea la informacion de los sockets que envian y reciben del router actual
     grupo_envio = (HOST,ports[num_hilo])
     sock_envio = socket(AF_INET, SOCK_DGRAM)
@@ -138,10 +151,7 @@ for num_hilo in range(1,6):
     sockets[num_hilo][1].setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
     sockets[num_hilo][1].bind(server_address)
 
-
-    hilo1 = threading.Thread(name='comparte%s' % num_hilo,
-                            target=compartir)
-    hilo2 = threading.Thread(name='recibe%s' % num_hilo,
-                            target=recibir)
+    hilo1 = threading.Thread(name='comparte%s' % num_hilo, target=compartir)
+    hilo2 = threading.Thread(name='recibe%s' % num_hilo, target=recibir)
     hilo1.start()
     hilo2.start()

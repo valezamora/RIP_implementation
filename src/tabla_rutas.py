@@ -1,6 +1,5 @@
 from ruta import Ruta
 
-
 class TablaRutas:
     rutas = []
     id = None
@@ -52,10 +51,8 @@ class TablaRutas:
         for r in received_routes:
             self.agregar_ruta(r)
 
-        self.imprimirTabla()
-
-    # Imprime la tabla de rutas
-    def imprimirTabla(self):
+    # Imprimir tabla de rutas
+    def imprimir_tabla(self):
         print('\nTabla ' + str(self.id))
         print('Direccion\tMascara\t\t\tSiguiente\t\t\tDistancia')
         for ruta in self.rutas:
