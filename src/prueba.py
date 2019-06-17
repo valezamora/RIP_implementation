@@ -36,7 +36,7 @@ vecinos3 = ['1', '2', '4', '5']
 vecinos4 = ['3', '5']
 vecinos5 = ['3', '4']
 
-# Método que envía mensajes a los demás nodosm a través de la red definida
+# Método que envía mensajes a los demás nodos a través de la red definida
 def compartir():
     nombre = threading.current_thread().getName()
     count = 0
