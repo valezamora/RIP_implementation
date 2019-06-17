@@ -2,7 +2,6 @@ import threading
 import time
 from socket import *
 import struct
-
 from tabla_rutas import TablaRutas
 
 # ------------------------ DEFINICION DE VARIALES -----------------------------------
@@ -30,14 +29,14 @@ r2 = '10.0.3.0,255.255.255.0,10.0.3.1,0'
 r4 = '10.0.2.0,255.255.255.0,10.0.2.1,0'
 r5 = '10.0.4.0,255.255.255.0,10.0.4.1,0'
 
-
-
+# Vecinos de cada nodo definidos estáticamente
 vecinos1 = ['3']
 vecinos2 = ['3']
 vecinos3 = ['1', '2', '4', '5']
 vecinos4 = ['3', '5']
 vecinos5 = ['3', '4']
 
+# Método que envía mensajes a los demás nodosm a través de la red definida
 def compartir():
     nombre = threading.current_thread().getName()
     count = 0
@@ -49,6 +48,7 @@ def compartir():
     global vecinos5
     global hold_timers
 
+# Se separa el hilo comparte 3 para que deje de funcionar cuando transcurra 1 minuto
     if (threading.current_thread().getName() == 'comparte3'):
         while (time.time() - start_time < 60):
             # Send tablaRutas3
@@ -117,8 +117,6 @@ def compartir():
                         tablaRutas5.eliminar_ruta('10.0.3.0')
                         tablaRutas5.eliminar_ruta('10.0.1.0')
 
-
-
             if threading.current_thread().getName() == 'comparte1':
                 sockets[1][0].sendto(tablaRutas1.get_rutas().encode(), (HOST, MCAST_PORT))
                 # Send tablaRutas1
@@ -134,10 +132,11 @@ def compartir():
             count += 1
             time.sleep(10)  # Envia cada 10 segundos
 
-
+# Método que recibe los mensajes de los demás nodos en la red definida
 def recibir():
     count = 0
 
+# Se separa el hilo recibe 3 para que deje de funcionar cuando transcurra un minuto
     if threading.current_thread().getName() == 'recibe3':
         while (time.time() - start_time < 60):
             dato, address = sockets[3][1].recvfrom(1024)
@@ -199,7 +198,6 @@ def recibir():
             count += 1
             time.sleep(1)
 
-
 # ------------------------- PROGRAMA ---------------------------------------------
 
 start_time = time.time()
@@ -219,7 +217,6 @@ tablaRutas5.imprimir_tabla()
 print()
 nodo = input('Digite el numero de nodo que desea desplegar (1-5): ')
 print('IMRPIMIENDO DATOS DEL NODO ', nodo)
-
 
 for num_hilo in range(1, 6):
     # Crea la informacion de los sockets que envian y reciben del router actual

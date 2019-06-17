@@ -60,7 +60,6 @@ class TablaRutas:
             data = r.split(',')
             if len(data) == 4:
                 new_routes.append(Ruta(data[0], data[1], data[2], int(data[3])))
-
         return new_routes
 
     # Recibe un string de tabla de rutas y actualiza la tabla propia con la informacion recibida
@@ -76,4 +75,3 @@ class TablaRutas:
         print('Direccion\tMascara\t\t\tSiguiente\t\tDistancia')
         for ruta in self.rutas:
             print(ruta.red + '\t' + ruta.mascara + '\t' + ruta.siguiente + '\t\t' + str(ruta.distancia))
-
