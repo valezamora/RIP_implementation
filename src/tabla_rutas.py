@@ -6,6 +6,18 @@ class TablaRutas:
         self.id = i
         self.rutas = []
 
+    #Elimina definitivamente una ruta de la tabla de rutas
+    def eliminar_ruta(self, red_destino):
+        for ruta in self.rutas:
+            if ruta.red == red_destino:
+                self.rutas.remove(ruta)
+
+    #Busca la ruta correspondiente a un nodo vecino y le asigna distancia 16
+    def desconectar_ruta(self,red_destino):
+        for ruta in self.rutas:
+            if ruta.red == red_destino:
+                ruta.distancia = 16
+
     # Agrega una ruta a la tabla de rutas
     def agregar_ruta(self, ruta2):
         encontrado = False

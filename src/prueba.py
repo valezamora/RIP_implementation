@@ -12,6 +12,8 @@ MCAST_PORT = 2012
 # ports = [2001 + i * 0 for i in range(0, 11)]
 sockets = [[] for i in range(0, 6)]  # Indice 0 es para el socket que envia y el indice 1 es para el socket que recibe datos
 # main_port = 2001
+# Primer indice indica el nodo principal, el segundo indice indica el tiempo que el nodo principal lleva esperando al nodo
+hold_timers = [[0 for n in range(0,6)] for m in range(0,6)]
 
 
 # Instancias de tabla de rutas
@@ -28,6 +30,8 @@ r2 = '10.0.3.0,255.255.255.0,10.0.3.1,0'
 r4 = '10.0.2.0,255.255.255.0,10.0.2.1,0'
 r5 = '10.0.4.0,255.255.255.0,10.0.4.1,0'
 
+
+
 vecinos1 = ['3']
 vecinos2 = ['3']
 vecinos3 = ['1', '2', '4', '5']
@@ -37,6 +41,14 @@ vecinos5 = ['3', '4']
 def compartir():
     nombre = threading.current_thread().getName()
     count = 0
+    global kill3
+    global vecinos1
+    global vecinos2
+    global vecinos3
+    global vecinos4
+    global vecinos5
+    global hold_timers
+
     if (threading.current_thread().getName() == 'comparte3'):
         while (time.time() - start_time < 60):
             # Send tablaRutas3
@@ -46,6 +58,67 @@ def compartir():
 
     else:
         while (time.time() - start_time < 120):
+            if time.time() - start_time > 60:
+                if kill3 == False:
+                    vecinos1 = []
+                    vecinos2 = []
+                    vecinos3 = []
+                    vecinos4 = ['5']
+                    vecinos5 = ['4']
+
+
+                    for n in range(1,6):
+                        if n != 3:
+                            # setea todos los holdtimers
+                            hold_timers[n][3] = time.time()
+                            hold_timers[3][n] = time.time()
+                    #implementa distancias infinitas
+                    tablaRutas3.desconectar_ruta('10.0.1.0')
+                    tablaRutas3.desconectar_ruta('10.0.3.0')
+                    tablaRutas3.desconectar_ruta('10.0.2.0')
+                    tablaRutas3.desconectar_ruta('10.0.4.0')
+
+                    tablaRutas1.desconectar_ruta('10.0.3.0')
+                    tablaRutas1.desconectar_ruta('10.0.2.0')
+                    tablaRutas1.desconectar_ruta('10.0.4.0')
+
+                    tablaRutas2.desconectar_ruta('10.0.3.0')
+                    tablaRutas2.desconectar_ruta('10.0.1.0')
+                    tablaRutas2.desconectar_ruta('10.0.4.0')
+
+                    tablaRutas4.desconectar_ruta('10.0.3.0')
+                    tablaRutas4.desconectar_ruta('10.0.1.0')
+
+                    tablaRutas5.desconectar_ruta('10.0.3.0')
+                    tablaRutas5.desconectar_ruta('10.0.1.0')
+                    kill3 = True
+
+                else:
+                    #Si el holdtimer excedio los 20 minutos, elimina la ruta de la tab la de rutas
+
+                    if  time.time() - hold_timers[1][3] > 19:
+                        #elimina defiitivamente las rutas conectadas al router 3
+                        tablaRutas3.eliminar_ruta('10.0.1.0')
+                        tablaRutas3.eliminar_ruta('10.0.3.0')
+                        tablaRutas3.eliminar_ruta('10.0.2.0')
+                        tablaRutas3.eliminar_ruta('10.0.4.0')
+
+                        tablaRutas1.eliminar_ruta('10.0.3.0')
+                        tablaRutas1.eliminar_ruta('10.0.2.0')
+                        tablaRutas1.eliminar_ruta('10.0.4.0')
+
+                        tablaRutas2.eliminar_ruta('10.0.3.0')
+                        tablaRutas2.eliminar_ruta('10.0.1.0')
+                        tablaRutas2.eliminar_ruta('10.0.4.0')
+
+                        tablaRutas4.eliminar_ruta('10.0.3.0')
+                        tablaRutas4.eliminar_ruta('10.0.1.0')
+
+                        tablaRutas5.eliminar_ruta('10.0.3.0')
+                        tablaRutas5.eliminar_ruta('10.0.1.0')
+
+
+
             if threading.current_thread().getName() == 'comparte1':
                 sockets[1][0].sendto(tablaRutas1.get_rutas().encode(), (HOST, MCAST_PORT))
                 # Send tablaRutas1
@@ -60,7 +133,6 @@ def compartir():
                 # Send tablaRutas5
             count += 1
             time.sleep(10)  # Envia cada 10 segundos
-
 
 
 def recibir():
