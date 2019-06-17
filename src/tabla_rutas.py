@@ -25,7 +25,7 @@ class TablaRutas:
             if ruta.red == ruta2.red:
                 encontrado = True
                 # Modifica la distancia solamente si es menor la nueva y no es inalcanzable (16)
-                if ruta2.distancia + 1 < ruta.distancia and ruta2 != 16:
+                if ruta2.distancia + 1 < ruta.distancia and ruta2.distancia != 16:
                     # Revisar cual es el siguiente que tiene que agregar
                     ruta.siguiente = ruta2.siguiente
                     ruta.distancia = ruta2.distancia + 1
