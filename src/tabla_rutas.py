@@ -19,20 +19,19 @@ class TablaRutas:
                 ruta.distancia = 16
 
     # Agrega una ruta a la tabla de rutas
-    def agregar_ruta(self, ruta2):
+    def agregar_ruta(self, ruta2, vecino):
         encontrado = False
         for ruta in self.rutas:
             if ruta.red == ruta2.red:
                 encontrado = True
                 # Modifica la distancia solamente si es menor la nueva y no es inalcanzable (16)
                 if ruta2.distancia + 1 < ruta.distancia and ruta2.distancia != 16:
-                    # Revisar cual es el siguiente que tiene que agregar
-                    ruta.siguiente = ruta2.siguiente
+                    ruta.siguiente = vecino
                     ruta.distancia = ruta2.distancia + 1
 
         if not encontrado:
             # Revisar cual es el siguiente que tiene que agregar
-            self.rutas.append(Ruta(ruta2.red, ruta2.mascara, ruta2.siguiente, ruta2.distancia+1))
+            self.rutas.append(Ruta(ruta2.red, ruta2.mascara, vecino, ruta2.distancia+1))
 
     # Verifica si una ruta existe dentro de la tabla de rutas
     def existe(self, ruta2):
@@ -63,10 +62,10 @@ class TablaRutas:
         return new_routes
 
     # Recibe un string de tabla de rutas y actualiza la tabla propia con la informacion recibida
-    def actualizar_tabla(self, tabla_string):
+    def actualizar_tabla(self, tabla_string, ruta_vecino):
         received_routes = self.string_to_tabla(tabla_string)
         for r in received_routes:
-            self.agregar_ruta(r)
+            self.agregar_ruta(r, ruta_vecino)
 
     # Imprimir tabla de rutas
     def imprimir_tabla(self):

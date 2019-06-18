@@ -36,6 +36,13 @@ vecinos3 = ['1', '2', '4', '5']
 vecinos4 = ['3', '5']
 vecinos5 = ['3', '4']
 
+# Ruta al vecino de cada nodo
+rutas1 = ['192.168.0.2']
+rutas2 = ['192.168.0.18']
+rutas3 = ['192.168.0.1', '192.168.0.17', '192.168.0.6', '192.168.0.14']
+rutas4 = ['192.168.0.5', '192.168.0.10']
+rutas5 = ['192.168.0.13', '192.168.0.9']
+
 # Método que envía mensajes a los demás nodos a través de la red definida
 def compartir():
     nombre = threading.current_thread().getName()
@@ -144,7 +151,7 @@ def recibir():
             split = dato.split('/')
             id = split[0]
             if id in vecinos3 and len(split) == 2:
-                tablaRutas3.actualizar_tabla(split[1])
+                tablaRutas3.actualizar_tabla(split[1], rutas3[vecinos3.index(id)])
             count += 1
             if nodo == '3':
                 tablaRutas3.imprimir_tabla()
@@ -159,7 +166,7 @@ def recibir():
                     split = dato.split('/')
                     id = split[0]
                     if id in vecinos1:
-                        tablaRutas1.actualizar_tabla(split[1])
+                        tablaRutas1.actualizar_tabla(split[1], rutas1[vecinos1.index(id)])
 
                 elif threading.current_thread().getName() == 'recibe2':
                     dato , address = sockets[2][1].recvfrom(1024)
@@ -167,7 +174,7 @@ def recibir():
                     split = dato.split('/')
                     id = split[0]
                     if id in vecinos2:
-                        tablaRutas2.actualizar_tabla(split[1])
+                        tablaRutas2.actualizar_tabla(split[1], rutas2[vecinos2.index(id)])
 
                 elif threading.current_thread().getName() == 'recibe4':
                     dato, address = sockets[4][1].recvfrom(1024)
@@ -175,7 +182,7 @@ def recibir():
                     split = dato.split('/')
                     id = split[0]
                     if id in vecinos4:
-                        tablaRutas4.actualizar_tabla(split[1])
+                        tablaRutas4.actualizar_tabla(split[1], rutas4[vecinos4.index(id)])
 
                 elif threading.current_thread().getName() == 'recibe5':
                     dato, address = sockets[5][1].recvfrom(1024)
@@ -183,7 +190,7 @@ def recibir():
                     split = dato.split('/')
                     id = split[0]
                     if id in vecinos5:
-                        tablaRutas5.actualizar_tabla(split[1])
+                        tablaRutas5.actualizar_tabla(split[1], rutas5[vecinos5.index(id)])
 
                 if nodo == '1' and threading.current_thread().getName() == 'recibe1':
                     tablaRutas1.imprimir_tabla()
@@ -202,10 +209,10 @@ def recibir():
 
 start_time = time.time()
 
-tablaRutas1.actualizar_tabla(r1)
-tablaRutas2.actualizar_tabla(r2)
-tablaRutas4.actualizar_tabla(r4)
-tablaRutas5.actualizar_tabla(r5)
+tablaRutas1.actualizar_tabla(r1, '10.0.1.1')
+tablaRutas2.actualizar_tabla(r2, '10.0.3.1')
+tablaRutas4.actualizar_tabla(r4, '10.0.2.1')
+tablaRutas5.actualizar_tabla(r5, '10.0.4.1')
 
 print('Configuracion inicial:')
 tablaRutas1.imprimir_tabla()
@@ -240,7 +247,7 @@ for num_hilo in range(1, 6):
     sockets[num_hilo].append(sock_envio)
     sockets[num_hilo].append(sock_recibido)
 
-    #server_address = (HOST, MCAST_PORT)
+    # server_address = (HOST, MCAST_PORT)
     server_address = ('', MCAST_PORT)
     sockets[num_hilo][1].setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
     sockets[num_hilo][1].bind(server_address)
